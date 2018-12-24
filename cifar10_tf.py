@@ -3,12 +3,10 @@
 # Mark Harvey
 # Dec 2018
 ######################################################
-
 import os
 import sys
 import shutil
 import tensorflow as tf
-
 
 
 #####################################################
@@ -16,7 +14,6 @@ import tensorflow as tf
 #####################################################
 print("Tensorflow version. ", tf.VERSION)
 print("Keras version. ", tf.keras.__version__)
-
 
 
 #####################################################
@@ -170,7 +167,7 @@ with tf.Session() as sess:
     writer.close()
 
     # Evaluation cycle with test data
-    print ("Final Accuracy with test set:", sess.run(accuracy, feed_dict={x: x_test[:4000], y: y_test[:4000]}))
+    print ("Final Accuracy with test set:", sess.run(accuracy, feed_dict={x: x_test, y: y_test}))
 
     # save checkpoint & graph file as protobuf text
     save_path = saver.save(sess, CHKPT_PATH)
