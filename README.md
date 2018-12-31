@@ -1,4 +1,4 @@
-# cifar10_tensorflow
+# CIFAR10 using TensorFlow
 CIFAR-10 image classifier using TensorFlow that demonstrates:
 
 - Download of CIFAR-10 dataset using Keras
@@ -6,3 +6,6 @@ CIFAR-10 image classifier using TensorFlow that demonstrates:
 - Defining a simple CNN using the tf.layers API
 - Saving data graph for display with TensorBoard
 - Saving checkpoints and graph as protobuf files
+
+
+The Jupyter notebook can be visualized or downloaded from here: 
