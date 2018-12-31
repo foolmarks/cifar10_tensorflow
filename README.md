@@ -9,3 +9,5 @@ CIFAR-10 image classifier using TensorFlow that demonstrates:
 
 
 The Jupyter notebook can be visualized or downloaded from here: https://github.com/foolmarks/cifar10_tensorflow/blob/master/cifar10_tf.ipynb
+
+The Python source code is here: https://github.com/foolmarks/cifar10_tensorflow/blob/master/cifar10_tf.py
