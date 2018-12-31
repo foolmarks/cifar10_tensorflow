@@ -8,6 +8,6 @@ CIFAR-10 image classifier using TensorFlow that demonstrates:
 - Saving checkpoints and graph as protobuf files
 
 
-The Jupyter notebook can be visualized or downloaded from here: https://github.com/foolmarks/cifar10_tensorflow/blob/master/cifar10_tf.ipynb
+The Jupyter notebook can be visualized or downloaded from <a href="https://github.com/foolmarks/cifar10_tensorflow/blob/master/cifar10_tf.ipynb">here</a> 
 
 The Python source code is here: https://github.com/foolmarks/cifar10_tensorflow/blob/master/cifar10_tf.py
