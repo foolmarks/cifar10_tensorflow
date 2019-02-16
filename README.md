@@ -1,4 +1,4 @@
-# CIFAR10 using TensorFlow
+# CIFAR10 using TensorFlow - tested with TensorFlow 1.12
 CIFAR-10 image classifier using TensorFlow that demonstrates:
 
 - Download of CIFAR-10 dataset using Keras
