@@ -10,7 +10,6 @@ import tensorflow as tf
 from tensorflow.python.tools import freeze_graph
 
 
-
 #####################################################
 # Housekeeping
 #####################################################
@@ -73,7 +72,7 @@ print("Directory " , FREEZE_DIR ,  "created ")
 # Hyperparameters
 #####################################################
 LEARNRATE = 0.0001
-EPOCHS = 2
+EPOCHS = 1000
 BATCHSIZE = 50
 
 
@@ -180,7 +179,7 @@ with tf.Session() as sess:
     writer.close()
 
     # Evaluation cycle with test data
-    print ("Final Accuracy with test set:", sess.run(accuracy, feed_dict={x: x_test[:1000], y: y_test[:1000]}))
+    print ("Final Accuracy with test set:", sess.run(accuracy, feed_dict={x: x_test, y: y_test}))
 
     # save checkpoint & graph file as binary & text protobuf
     save_path = saver.save(sess, os.path.join(CHKPT_DIR, CHKPT_FILE) )
