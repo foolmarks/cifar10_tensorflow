@@ -6,6 +6,7 @@ CIFAR-10 image classifier using TensorFlow that demonstrates:
 - Defining a simple CNN using the tf.layers API
 - Saving data and graph for display with TensorBoard
 - Saving checkpoints and graph as protobuf files
+- Creation of frozen graph for deployment
 
 
 The Jupyter notebook can be visualized or downloaded from <a href="https://github.com/foolmarks/cifar10_tensorflow/blob/master/cifar10_tf.ipynb">here.</a> 
