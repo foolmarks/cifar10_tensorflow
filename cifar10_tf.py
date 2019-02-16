@@ -1,12 +1,14 @@
 ######################################################
 # CIFAR-10 example
 # Mark Harvey
-# Dec 2018
+# Jan 2019
 ######################################################
 import os
 import sys
 import shutil
 import tensorflow as tf
+from tensorflow.python.tools import freeze_graph
+
 
 
 #####################################################
@@ -31,14 +33,16 @@ def get_script_directory():
 SCRIPT_DIR = get_script_directory()
 print('This script is located in: ', SCRIPT_DIR)
 
-GRAPH_FILE = 'graph.pbtxt'
+GRAPH_FILE_BIN = 'graph.pb'
+GRAPH_FILE_TXT = 'graph.pbtxt'
 CHKPT_FILE = 'float_model.ckpt'
-CHKPT_DIR = 'checkpoints'
+FROZEN_GRAPH_FILE = 'frozen_graph.pb'
 
+CHKPT_DIR = os.path.join(SCRIPT_DIR, 'chkpts')
 TB_LOG_DIR = os.path.join(SCRIPT_DIR, 'tb_logs')
-MODEL_DIR = os.path.join(SCRIPT_DIR, 'model')
-CHKPT_DIR = os.path.join(SCRIPT_DIR, CHKPT_DIR)
+FREEZE_DIR = os.path.join(SCRIPT_DIR, 'freeze')
 CHKPT_PATH = os.path.join(CHKPT_DIR, CHKPT_FILE)
+
 
 
 # create a directory for the TensorBoard data if it doesn't already exist
@@ -54,14 +58,23 @@ print("Directory " , TB_LOG_DIR ,  "created ")
 if (os.path.exists(CHKPT_DIR)):
     shutil.rmtree(CHKPT_DIR)
 os.makedirs(CHKPT_DIR)
-print("Directory " , CHKPT_DIR ,  "created ") 
+print("Directory " , CHKPT_DIR ,  "created ")
+
+
+# create a directory for the frozen graph if it doesn't already exist
+# delete it and recreate if it already exists
+if (os.path.exists(FREEZE_DIR)):
+    shutil.rmtree(FREEZE_DIR)
+os.makedirs(FREEZE_DIR)
+print("Directory " , FREEZE_DIR ,  "created ")
+
 
 #####################################################
 # Hyperparameters
 #####################################################
 LEARNRATE = 0.0001
-EPOCHS = 500
-BATCHSIZE = 100
+EPOCHS = 2
+BATCHSIZE = 50
 
 
 
@@ -167,12 +180,27 @@ with tf.Session() as sess:
     writer.close()
 
     # Evaluation cycle with test data
-    print ("Final Accuracy with test set:", sess.run(accuracy, feed_dict={x: x_test, y: y_test}))
+    print ("Final Accuracy with test set:", sess.run(accuracy, feed_dict={x: x_test[:1000], y: y_test[:1000]}))
 
-    # save checkpoint & graph file as protobuf text
-    save_path = saver.save(sess, CHKPT_PATH)
-    tf.train.write_graph(sess.graph_def, CHKPT_DIR, GRAPH_FILE)
+    # save checkpoint & graph file as binary & text protobuf
+    save_path = saver.save(sess, os.path.join(CHKPT_DIR, CHKPT_FILE) )
+    tf.train.write_graph(sess.graph_def, CHKPT_DIR, GRAPH_FILE_BIN, as_text=False)
+    tf.train.write_graph(sess.graph_def, CHKPT_DIR, GRAPH_FILE_TXT, as_text=True)
+
+    # freeze the saved graph - converts variables to constants & removes training nodes
+    freeze_graph.freeze_graph(input_graph=os.path.join(CHKPT_DIR,GRAPH_FILE_BIN),
+                              input_saver='',
+                              input_binary = True,
+                              input_checkpoint = os.path.join(CHKPT_DIR, CHKPT_FILE),
+                              output_node_names = 'prediction/Softmax',
+                              restore_op_name ='save/restore_all',
+                              filename_tensor_name = 'save/Const:0',
+                              output_graph = os.path.join(FREEZE_DIR,FROZEN_GRAPH_FILE),
+                              clear_devices = True,
+                              initializer_nodes = '')
+
+
+#  Session ended
 
 print('FINISHED!')
 print('Run `tensorboard --logdir=%s --port 6006 --host localhost` to see the results.' % TB_LOG_DIR)
-
